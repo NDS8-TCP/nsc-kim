@@ -86,7 +86,7 @@ def calc_column_sums(A, N):
 # Main region
 # ----------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
-    # Milestone 1 + 2
+    # Milestone 1 + 2 - Basic Arrays + Vectorize Mandelbrot
     C_grid = create_grid(width, height)
     t, M = benchmark(compute_mandelbrot, C_grid)
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     plt.ylabel('Imaginary axis')
     plt.show()
 
-    # Milestone 3
+    # Milestone 3 -  Memory Access Patterns 
     N = 10000
     A = np.random.rand(N, N)
     A_f = np.asfortranarray(A)
@@ -110,3 +110,21 @@ if __name__ == "__main__":
     # Fortran -> moves fastest column wise
     t, M = benchmark(calc_row_sums, A_f, N)
     t, M = benchmark(calc_column_sums, A_f, N)
+
+    # Milestone 4 - Problem Size Scaling
+    
+    # Timeline plot
+    sizes = [256, 512, 1024, 2048, 4096]
+    times = []
+    
+    for s in sizes:
+        C_grid = create_grid(s, s)
+        t, _ = benchmark(compute_mandelbrot, C_grid)
+        times.append(t)
+    
+    plt.plot(times, sizes, marker='o')
+    plt.ylabel('Resolution')
+    plt.xlabel('Time (seconds)')
+    plt.title('Mandelbrot scaling')
+    plt.grid()
+    plt.show()
