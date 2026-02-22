@@ -76,9 +76,37 @@ def benchmark ( func , * args , n_runs =3) -> tuple:
     
     return median_t, result
 
+def calc_row_sums(A, N):
+    for i in range(N): s = np.sum(A[i, :])
+
+def calc_column_sums(A, N):
+    for j in range(N): s = np.sum(A[:, j])
+
 # ----------------------------------------------------------------------------------------------------
 # Main region
 # ----------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
+    # Milestone 1 + 2
     C_grid = create_grid(width, height)
     t, M = benchmark(compute_mandelbrot, C_grid)
+
+    # Plot Mandelbrot
+    plt.imshow( M, extent=(x_min, x_max, y_min, y_max), cmap='plasma' )
+    plt.colorbar()
+    plt.title('Mandelbrot plot')
+    plt.xlabel('Real axis')
+    plt.ylabel('Imaginary axis')
+    plt.show()
+
+    # Milestone 3
+    N = 10000
+    A = np.random.rand(N, N)
+    A_f = np.asfortranarray(A)
+    
+    # Python -> moves fastest row wise
+    t, M = benchmark(calc_row_sums, A, N)
+    t, M = benchmark(calc_column_sums, A, N)
+    
+    # Fortran -> moves fastest column wise
+    t, M = benchmark(calc_row_sums, A_f, N)
+    t, M = benchmark(calc_column_sums, A_f, N)
