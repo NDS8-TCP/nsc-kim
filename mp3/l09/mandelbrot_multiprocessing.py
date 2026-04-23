@@ -62,17 +62,17 @@ def mandelbrot_chunk(
 def _worker(args):
     return mandelbrot_chunk(*args)
 
-def mandelbrot_multiprocessing(N, x_min, x_max, y_min, y_max, max_iter):
-    cores = psutil.cpu_count(logical=False)
-    for n_workers in range(1, cores + 1):
-        chunk_size = max(1, N // n_workers)
-        chunks, row = [], 0
-        while row < N:
-            end = min(row + chunk_size, N)
-            chunks.append((row, end, N, x_min, x_max, y_min, y_max, max_iter))
-            row = end
+# def mandelbrot_multiprocessing(N, x_min, x_max, y_min, y_max, max_iter):
+#     cores = psutil.cpu_count(logical=False)
+#     for n_workers in range(1, cores + 1):
+#         chunk_size = max(1, N // n_workers)
+#         chunks, row = [], 0
+#         while row < N:
+#             end = min(row + chunk_size, N)
+#             chunks.append((row, end, N, x_min, x_max, y_min, y_max, max_iter))
+#             row = end
 
-        with Pool(processes=n_workers) as pool:
-            pool.map(_worker, chunks)  # warm-up: Numba JIT in all workers
-            for _ in range(3):
-                np.vstack(pool.map(_worker, chunks))
+#         with Pool(processes=n_workers) as pool:
+#             pool.map(_worker, chunks)  # warm-up: Numba JIT in all workers
+#             for _ in range(3):
+#                 np.vstack(pool.map(_worker, chunks))
